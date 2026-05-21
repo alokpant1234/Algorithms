@@ -1,0 +1,52 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+using namespace std;
+
+#define INF 1e9
+
+void dijkstra(int V, vector<pair<int, int>> adj[], int source) {
+    vector<int> dist(V, INF);
+
+    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
+
+    dist[source] = 0;
+    pq.push({0, source});
+
+    while (!pq.empty()) {
+        int u = pq.top().second;
+        pq.pop();
+
+        for (auto it : adj[u]) {
+            int v = it.first;
+            int weight = it.second;
+            if (dist[u] + weight < dist[v]) {
+                dist[v] = dist[u] + weight;
+                pq.push({dist[v], v});
+            }
+        }
+    }
+
+    cout << "Vertex \t Distance from Source\n";
+    for (int i = 0; i < V; i++) {
+        cout << i << " \t " << dist[i] << endl;
+    }
+}
+
+int main() {
+    int V = 5;
+    vector<pair<int, int>> adj[V];
+
+    adj[0].push_back({1, 2});
+    adj[0].push_back({2, 4});
+    adj[1].push_back({2, 1});
+    adj[1].push_back({3, 7});
+    adj[2].push_back({4, 3});
+    adj[3].push_back({4, 1});
+
+    int source = 0;
+
+    dijkstra(V, adj, source);
+
+    return 0;
+}
